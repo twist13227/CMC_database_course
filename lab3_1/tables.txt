@@ -1,0 +1,38 @@
+\connect huge_session
+
+DROP SCHEMA IF EXISTS schedule CASCADE;
+
+CREATE SCHEMA schedule;
+
+CREATE TABLE schedule.exams (
+    exam_id BIGSERIAL PRIMARY KEY,
+    reporting text,
+    subject_name text,
+    "date" date,
+    examiners_ids integer[],
+    examiners_surnames text[],
+    faculty text,
+    groups integer[]
+);
+
+CREATE TABLE schedule.examiners (
+    examiner_id BIGSERIAL PRIMARY KEY,
+    surname text NOT NULL,
+    name text,
+    patronymic text,
+    age integer
+);
+
+CREATE TABLE schedule.feedbacks (
+    feedback_id BIGSERIAL PRIMARY KEY,
+    exam_id bigint DEFAULT NULL REFERENCES schedule.exams ON DELETE SET NULL,
+    subject_name text,
+    "date" date,
+    examiner_id bigint REFERENCES schedule.examiners ON DELETE CASCADE,
+    examiner_surname text,
+    feedback text,
+    rate integer,
+    student_info jsonb
+);
+
+
